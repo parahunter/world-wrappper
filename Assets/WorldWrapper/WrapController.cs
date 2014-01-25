@@ -46,7 +46,7 @@ public class WrapController : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			if(wrapped)
+			if(!wrapped)
 			{
 				world.Wrap();
 				bodies.ForEach(body => body.Wrap());

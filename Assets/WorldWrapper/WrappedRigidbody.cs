@@ -46,16 +46,48 @@ public class WrappedRigidbody : MonoBehaviour
 
 	public void Wrap()
 	{
-		transform.position = WorldWrapper.WrapPoint(transform.position);
-		transform.Translate(transform.position.normalized * onWrapOffset);
+		StartCoroutine(WrapAnimate());
+	}
+
+	IEnumerator WrapAnimate()
+	{
 		wrapped = true;
+		rigidbody.isKinematic = true;
+		collider.enabled = false;
+		Vector3 unwrappedPoint = transform.position;
+		Vector3 wrappedPoint = WorldWrapper.WrapPoint(transform.position);
+
+		yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
+		{
+			transform.position = Vector3.Slerp(unwrappedPoint, wrappedPoint, t);
+		}));
+
+		rigidbody.isKinematic = false;
+		collider.enabled = true;
+
 	}
 
 	public void Unwrap()
 	{
-		transform.position = WorldWrapper.UnwrapPoint(transform.position);
-		transform.Translate(Vector3.up * onWrapOffset);
-		
-		wrapped = false;
+		StartCoroutine(UnwrapAnimate());
 	}
+
+	IEnumerator UnwrapAnimate()
+	{
+		wrapped = false;
+		rigidbody.isKinematic = true;
+		collider.enabled = false;
+		Vector3 wrappedPoint = transform.position;
+		Vector3 unwrappedPoint = WorldWrapper.UnwrapPoint(transform.position);
+		
+		yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
+		                                       {
+			transform.position = Vector3.Slerp(wrappedPoint, unwrappedPoint, t);
+		}));
+		
+		rigidbody.isKinematic = false;
+		collider.enabled = true;
+		
+	}
+
 }
