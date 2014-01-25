@@ -57,7 +57,8 @@ public class PlayerMoveScript : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () 
+	{
 		CaptureKeyState();
 
 		MoveControl();
@@ -66,7 +67,7 @@ public class PlayerMoveScript : MonoBehaviour {
 		{
 			if(mKeyState.up && !mOldKeyState.up)
 			{
-				gameObject.rigidbody.AddForce(50.0f * gameObject.transform.up);
+				gameObject.rigidbody.AddForce(50.0f * transform.up);
 			}
 		}
 
