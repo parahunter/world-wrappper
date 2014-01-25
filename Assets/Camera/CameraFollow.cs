@@ -11,13 +11,18 @@ public class CameraFollow : MonoBehaviour
 
 	private Vector3 velocity;
 	private float rotateVelocity;
+	public float heightOffset = 5;
 
 	// Update is called once per frame
 	void Update () 
 	{
+		if(WrapController.instance.isWrapping)
+			return;
+
 		Vector3 pos = transform.position;
 
-		pos = Vector3.SmoothDamp(transform.position, target.position, ref velocity, followTime);
+		Vector3 targetPos = target.position + target.up * heightOffset;
+		pos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, followTime);
 		pos.z = transform.position.z;
 
 		transform.position = pos;
@@ -26,6 +31,38 @@ public class CameraFollow : MonoBehaviour
 		float angle = Mathf.SmoothDampAngle(currentAngle, target.rotation.eulerAngles.z, ref rotateVelocity, rotateFollowTime);
 
 		transform.rotation = Quaternion.Euler(new Vector3(0,0, angle));
+	}
+
+	public void Wrap()
+	{
+		StartCoroutine(WrapAnimate());
+	}
+	
+	IEnumerator WrapAnimate()
+	{
+		Vector3 unwrappedPoint = transform.position;
+		Vector3 wrappedPoint = WorldWrapper.WrapPoint(transform.position);
+
+		yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
+        {
+			transform.position = Vector3.Slerp(unwrappedPoint, wrappedPoint, t);
+		}));
+	}
+	
+	public void Unwrap()
+	{
+		StartCoroutine(UnwrapAnimate());
+	}
+	
+	IEnumerator UnwrapAnimate()
+	{
+		Vector3 unwrappedPoint = WorldWrapper.UnwrapPoint(transform.position);
+		Vector3 wrappedPoint = transform.position;
+
+		yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
+		                                       {
+			transform.position = Vector3.Slerp(wrappedPoint, unwrappedPoint, t);
+		}));
 	}
 }
 

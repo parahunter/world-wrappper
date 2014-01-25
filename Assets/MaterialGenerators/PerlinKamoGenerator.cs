@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PerlinGenerator : MonoBehaviour
+public class PerlinKamoGenerator : MonoBehaviour
 {
 	public Material material;
 
@@ -17,8 +17,13 @@ public class PerlinGenerator : MonoBehaviour
 	// over the width and height of the texture.
 	public float baseScale = 1.0f;
 
-	public Color color1;
-	public Color color2;
+	[System.Serializable]
+	public class ThresholdColor
+	{
+		public float threshold;
+		public Color color;
+	}
+	public ThresholdColor[] colors;
 
 	private Texture2D noiseTex;
 	private Color[] pix; 
@@ -52,9 +57,15 @@ public class PerlinGenerator : MonoBehaviour
 				float xCoord = xOrg + (float)x / noiseTex.width * scale;
 				float yCoord = yOrg + (float)y / noiseTex.height * scale;
 				float sample = Mathf.PerlinNoise(xCoord, yCoord);
-				pix[y * noiseTex.width + x] = new Color(Mathf.Lerp(color1.r, color2.r, sample), 
-				                                        Mathf.Lerp(color1.g, color2.g, sample), 
-				                                        Mathf.Lerp(color1.b, color2.b, sample));
+
+				for(int i = 0; i < colors.Length; ++i)
+				{
+					if (sample < colors[i].threshold)
+					{
+						pix[y * noiseTex.width + x] = colors[i].color;
+						break;
+					}
+				}
 			}
 		}
 		

@@ -5,6 +5,7 @@ using System.Linq;
 
 public class WrapController : MonoBehaviour 
 {
+	public CameraFollow followScript;
 	public World world;
 	public float wrapTime = 1f;
 
@@ -70,11 +71,13 @@ public class WrapController : MonoBehaviour
 		if(!wrapped)
 		{
 			world.Wrap();
+			followScript.Wrap();
 			entities.ForEach(body => body.Wrap());
 		}
 		else
 		{
 			world.Unwrap();
+			followScript.Unwrap();
 			entities.ForEach(body => body.Unwrap());
 		}
 		wrapped = !wrapped;

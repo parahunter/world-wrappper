@@ -78,7 +78,7 @@ public class PlayerMoveScript : MonoBehaviour {
 			{
 				rigidbody.AddForce(jumpPower * transform.up, forcemode);
 			}
-		}
+		}	
 
 		mOldKeyState = mKeyState;
 	}
