@@ -64,6 +64,9 @@ public class PlayerMoveScript : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
+		if(!enabled)
+			return;
+
 		grounded = Grounded(); 
 
 		CaptureKeyState();

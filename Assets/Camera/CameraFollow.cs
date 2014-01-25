@@ -8,11 +8,12 @@ public class CameraFollow : MonoBehaviour
 
 	public float followTime = 1f;
 	public float rotateFollowTime = 1f;
-
+		
 	private Vector3 velocity;
 	private float rotateVelocity;
-	public float heightOffset = 5;
-
+	public float heightOffsetUnwrapped = 5;
+	public float heightOffsetWrapped = 5;
+	
 	// Update is called once per frame
 	void Update () 
 	{
@@ -21,6 +22,7 @@ public class CameraFollow : MonoBehaviour
 
 		Vector3 pos = transform.position;
 
+		float heightOffset = WrapController.instance.wrapped ? heightOffsetWrapped : heightOffsetUnwrapped;
 		Vector3 targetPos = target.position + target.up * heightOffset;
 		pos = Vector3.SmoothDamp(transform.position, targetPos, ref velocity, followTime);
 		pos.z = transform.position.z;
