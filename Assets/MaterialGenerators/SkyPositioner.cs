@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class SkyPositioner : MonoBehaviour {
+public class SkyPositioner : MonoBehaviour 
+{
 
 	Vector3 flatPosition = new Vector3(180,70,200);
 	Vector3 roundPoisition = new Vector3(0,0,200);
