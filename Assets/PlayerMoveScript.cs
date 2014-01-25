@@ -35,19 +35,17 @@ public class PlayerMoveScript : MonoBehaviour {
 		float grip = baseGrip;
 
 		if (grounded)
-			fullGrip = 100.0f;
+			grip = fullGrip;
 
-		if (xMovement != 0.0f) {
-			rigidbody.AddForce (transform.right * xMovement * grip, forcemode);
-		}
+		rigidbody.AddForce (transform.right * xMovement * grip, forcemode);
 	}
 
 	private bool Grounded()
 	{
-		Vector3 footPoint = transform.position - (circleRadius * transform.up);
+		Vector3 footPoint = Vector3.back * 1000 + transform.position - (circleRadius * transform.up);
 
 		Ray jumpRay = new Ray (footPoint, Vector3.forward);
-
+		Debug.DrawRay(jumpRay.origin, jumpRay.direction);
 		if (Physics.Raycast (jumpRay)) {
 			return true;
 		}
@@ -74,7 +72,7 @@ public class PlayerMoveScript : MonoBehaviour {
 
 		if(grounded)
 		{
-			if(mKeyState.up && !mOldKeyState.up)
+			if(Input.GetButtonDown("Vertical"))
 			{
 				rigidbody.AddForce(jumpPower * transform.up, forcemode);
 			}

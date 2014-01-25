@@ -8,6 +8,7 @@ public class WrapController : MonoBehaviour
 	public CameraFollow followScript;
 	public World world;
 	public float wrapTime = 1f;
+	public bool startWrapped = false;
 
 	public bool isWrapping
 	{
@@ -55,6 +56,8 @@ public class WrapController : MonoBehaviour
 	void Start()
 	{
 		wrapped = false;
+		if(startWrapped)
+			StartCoroutine(WrapCoroutine());
 	}
 
 	void Update()
