@@ -3,18 +3,16 @@ using System.Collections;
 
 public class SkyPositioner : MonoBehaviour {
 
+	Vector3 flatPosition = new Vector3(180,70,200);
+	Vector3 roundPoisition = new Vector3(0,0,200);
+
 	// Use this for initialization
 	void Start () {
 	
 	}
 
 	// Update is called once per frame
-	void Update () { 
-		GameObject level = gameObject.transform.parent.gameObject;
-		Mesh mesh = level.GetComponent<MeshFilter> ().mesh;
-		//Vector3 newPosition = new Vector3 (mesh.bounds.center.x, mesh.bounds.center.y, gameObject.transform.position.z);
-		//gameObject.transform.position = newPosition;
-		Vector3 newPosition = new Vector3 (mesh.bounds.center.x, mesh.bounds.center.y, gameObject.transform.localPosition.z);
-		gameObject.transform.localPosition = newPosition;
+	void Update () {
+		gameObject.transform.position = Vector3.Lerp (flatPosition, roundPoisition, WrapController.instance.wrapFactor);
 	}
 }
