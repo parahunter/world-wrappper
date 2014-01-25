@@ -32,6 +32,8 @@ public class SkyGenerator : MonoBehaviour {
 		pix = new Color[flatTex.width * flatTex.height];
 		CalcFlatTexture ();
 		CalcRoundTexture ();
+
+		gameObject.GetComponent<MeshRenderer> ().enabled = true;
 	}
 	
 	// Update is called once per frame
