@@ -18,17 +18,12 @@ public class World : MonoBehaviour
 	{
 		meshCollider = GetComponent<MeshCollider>();
 		mesh = GetComponent<MeshFilter>().mesh;
-		originalVertices = mesh.vertices;
-	}
 
-	// Update is called once per frame
-	void Update () 
-	{
-		if(Input.GetKeyDown(KeyCode.Space))
-			Wrap();
+		originalVertices = new Vector3[mesh.vertexCount];
+		mesh.vertices.CopyTo(originalVertices, 0);
 	}
 	
-	void Wrap()
+	public void Wrap()
 	{
 
 		Vector3[] verts = mesh.vertices;
@@ -36,12 +31,20 @@ public class World : MonoBehaviour
 		for(int i = 0 ; i < verts.Length ; i++)
 		{
 			verts[i] = WorldWrapper.WrapPoint( verts[i] );
+			verts[i] *= -1;
 		}
 		
 		mesh.vertices = verts;
 		meshCollider.sharedMesh = mesh;
 
-		transform.localScale = wrappedScale;
+		//transform.localScale = wrappedScale;
 	}
 
+	public void Unwrap()
+	{
+		mesh.vertices = originalVertices;
+		meshCollider.sharedMesh = mesh;
+
+		//transform.localScale = unwrappedScale;
+	}
 }
