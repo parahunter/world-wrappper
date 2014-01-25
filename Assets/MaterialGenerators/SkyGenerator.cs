@@ -8,11 +8,9 @@ public class SkyGenerator : MonoBehaviour {
 	// Width and height of the texture in pixels.
 	public int pixWidth;
 	public int pixHeight;
-	
-	public Color flatColor1;
-	public Color flatColor2;
-	public Color roundColor1;
-	public Color roundColor2;
+
+	public Gradient flatGradient;
+	public Gradient roundGradient;
 
 	public int numStars;
 	public float starThreshold;
@@ -52,7 +50,8 @@ public class SkyGenerator : MonoBehaviour {
 	void CalculateFlatColor(ref Color flatColor, int y)
 	{
 		float gradient = 1.0f - (float)y / flatTex.height;
-		flatColor = Color.Lerp(flatColor1, flatColor2, gradient);
+		flatColor = flatGradient.Evaluate (gradient);
+		//flatColor = Color.Lerp(flatColor1, flatColor2, gradient);
 	}
 
 	void CalculateRoundColor(ref Color roundColor, int x, int y)
@@ -67,7 +66,8 @@ public class SkyGenerator : MonoBehaviour {
 		}
 		else
 		{
-			roundColor = Color.Lerp(roundColor1, roundColor2, gradient);
+			//roundColor = Color.Lerp(roundColor1, roundColor2, gradient);
+			roundColor = roundGradient.Evaluate(gradient);
 		}
 	}
 	
