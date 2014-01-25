@@ -60,6 +60,7 @@ public class World : MonoBehaviour
 			}
 				
 			mesh.vertices = verts;
+			mesh.RecalculateBounds();
 			meshCollider.sharedMesh = mesh;
 
 			transform.localScale = Vector3.one;
@@ -77,6 +78,7 @@ public class World : MonoBehaviour
 			}
 			
 			mesh.vertices = verts;
+			mesh.RecalculateBounds();
 			meshCollider.sharedMesh = mesh;
 			
 			transform.localScale = Vector3.one;

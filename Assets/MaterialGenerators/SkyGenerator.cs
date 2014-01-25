@@ -9,53 +9,122 @@ public class SkyGenerator : MonoBehaviour {
 	public int pixWidth;
 	public int pixHeight;
 	
-	// The origin of the sampled area in the plane.
-	public float xOrg;
-	public float yOrg;
+	public Color flatColor1;
+	public Color flatColor2;
+	public Color roundColor1;
+	public Color roundColor2;
+
+	public int numStars;
+	public float starThreshold;
+	public float starProbabilityBase;
+	public float starProbabilityHeightModifier;
+	public Color starColor;
 	
-	public Color color1;
-	public Color color2;
-	
-	private Texture2D noiseTex;
+	private Texture2D flatTex;
+	private Texture2D roundTex;
+	private Texture2D lerpTex;
 	private Color[] pix; 
 
 	// Use this for initialization
-	void Awake () {
+	void Start () {
 		// Set up the texture and a Color array to hold pixels during processing.
-		noiseTex = new Texture2D(pixWidth, pixHeight);
-		pix = new Color[noiseTex.width * noiseTex.height];
-		material.mainTexture = noiseTex;
-		CalcTexture();
+		flatTex = new Texture2D(pixWidth, pixHeight);
+		roundTex = new Texture2D(pixWidth, pixHeight);
+		lerpTex = new Texture2D(pixWidth, pixHeight);
+		pix = new Color[flatTex.width * flatTex.height];
+		CalcFlatTexture ();
+		CalcRoundTexture ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (WrapController.instance.wrapFactor == 0.0f)
+			material.mainTexture = flatTex;
+		else if (WrapController.instance.wrapFactor == 1.0f)
+			material.mainTexture = roundTex;
+		else
+		{
+			CalcLerpTexture();
+			material.mainTexture = lerpTex;
+		}
 	}
 
-	void CalcTexture()
+	void CalculateFlatColor(ref Color flatColor, int y)
 	{
-		Color color = new Color ();
+		float gradient = 1.0f - (float)y / flatTex.height;
+		flatColor = Color.Lerp(flatColor1, flatColor2, gradient);
+	}
+
+	void CalculateRoundColor(ref Color roundColor, int x, int y)
+	{
+		Vector2 center = new Vector2 (roundTex.width / 2, roundTex.height / 2);
+		float maxValue = center.magnitude;
+		float gradient = Vector2.Distance(center, new Vector2(x,y)) / maxValue;
+		
+		if (gradient >  starThreshold && Random.value < (starProbabilityBase + starProbabilityHeightModifier * gradient))
+		{
+			roundColor = starColor;
+		}
+		else
+		{
+			roundColor = Color.Lerp(roundColor1, roundColor2, gradient);
+		}
+	}
+	
+	void CalcFlatTexture()
+	{
+		Color flatColor = new Color ();
 
 		// For each pixel in the texture...
-		for (int y = 0; y < noiseTex.height; y++)
+		for (int y = 0; y < flatTex.height; y++)
 		{
-			float gradient = (float)y / noiseTex.height;
-			color.r = Mathf.Lerp(color1.r, color2.r, gradient);
-			color.g = Mathf.Lerp(color1.g, color2.g, gradient);
-			color.b = Mathf.Lerp(color1.b, color2.b, gradient);
-			for (int x = 0; x < noiseTex.width; x++)
+			CalculateFlatColor(ref flatColor, y);
+
+			for (int x = 0; x < flatTex.width; x++)
 			{
-				// Get a sample from the corresponding position in the noise plane
-				// and create a greyscale pixel from it.
-				float xCoord = xOrg + (float)x / noiseTex.width;
-				float yCoord = yOrg + (float)y / noiseTex.height;
-				pix[y * noiseTex.width + x] = color;
+				pix[y * flatTex.width + x] = flatColor; 
 			}
 		}
 		
 		// Copy the pixel data to the texture and load it into the GPU.
-		noiseTex.SetPixels(pix);
-		noiseTex.Apply();
+		flatTex.SetPixels(pix);
+		flatTex.Apply();
+	}
+
+	void CalcRoundTexture()
+	{
+		Color roundColor = new Color ();
+		
+		// For each pixel in the texture...
+		for (int y = 0; y < roundTex.height; y++)
+		{
+			for (int x = 0; x < roundTex.width; x++)
+			{
+				CalculateRoundColor(ref roundColor, x, y);
+				pix[y * roundTex.width + x] = roundColor; 
+			}
+		}
+		
+		// Copy the pixel data to the texture and load it into the GPU.
+		roundTex.SetPixels(pix);
+		roundTex.Apply();
+	}
+
+	void CalcLerpTexture()
+	{
+		Color roundColor = new Color ();
+		
+		// For each pixel in the texture...
+		for (int y = 0; y < flatTex.height; y++)
+		{
+			for (int x = 0; x < flatTex.width; x++)
+			{
+				pix[y * flatTex.width + x] = Color.Lerp(flatTex.GetPixel(x,y), roundTex.GetPixel(x,y), WrapController.instance.wrapFactor); 
+			}
+		}
+		
+		// Copy the pixel data to the texture and load it into the GPU.
+		lerpTex.SetPixels(pix);
+		lerpTex.Apply();
 	}
 }
