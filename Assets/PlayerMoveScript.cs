@@ -69,7 +69,7 @@ public class PlayerMoveScript : MonoBehaviour {
 			{
 				gameObject.rigidbody.AddForce(50.0f * transform.up);
 			}
-		}
+		}	
 
 		mOldKeyState = mKeyState;
 	}
