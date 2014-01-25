@@ -4,7 +4,6 @@ using System.Collections.Generic;
 
 public class WrappedCollider : WrappedEntity 
 {
-
 	Vector3 originalPos;
 	Quaternion originalRotation;
 
@@ -64,6 +63,5 @@ public class WrappedCollider : WrappedEntity
 			}));
 			
 			collider.enabled = true;
-			
 		}
 }
