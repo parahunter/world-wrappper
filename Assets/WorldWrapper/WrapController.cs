@@ -8,27 +8,41 @@ public class WrapController : MonoBehaviour
 	public World world;
 	public float wrapTime = 1f;
 
+	public bool isWrapping
+	{
+		get;
+		private set;
+	}
+
+	public float wrapFactor
+	{
+		get;
+		private set;
+	}
+
 	public static WrapController instance
 	{
 		get;
 		private set;
 	}
 
-	List<WrappedRigidbody> bodies = new List<WrappedRigidbody>();
+	List<WrappedEntity> entities = new List<WrappedEntity>();
 
-	public void AddBody(WrappedRigidbody body)
+	public void AddBody(WrappedEntity body)
 	{
-		bodies.Add(body);
+		entities.Add(body);
 	}
 
-	public void RemoveBody(WrappedRigidbody body)
+	public void RemoveBody(WrappedEntity body)
 	{
-		bodies.Remove(body);
+		entities.Remove(body);
 	}
 
 	void Awake()
 	{
 		instance = this;
+		isWrapping = false;
+		wrapFactor = 0;
 	}
 
 	public bool wrapped
@@ -44,23 +58,38 @@ public class WrapController : MonoBehaviour
 
 	void Update()
 	{
-		if(Input.GetKeyDown(KeyCode.Space))
+		if(Input.GetKeyDown(KeyCode.Q) && !isWrapping)
 		{
-			if(!wrapped)
-			{
-				world.Wrap();
-				bodies.ForEach(body => body.Wrap());
-			}
-			else
-			{
-				world.Unwrap();
-				bodies.ForEach(body => body.Unwrap());
-			}
-			wrapped = !wrapped;
+			StartCoroutine(WrapCoroutine());
 		}
 	}
 
+	IEnumerator WrapCoroutine()
+	{
+		isWrapping = true;
+		if(!wrapped)
+		{
+			world.Wrap();
+			entities.ForEach(body => body.Wrap());
+		}
+		else
+		{
+			world.Unwrap();
+			entities.ForEach(body => body.Unwrap());
+		}
+		wrapped = !wrapped;
 
+		yield return StartCoroutine(pTween.To(wrapTime, t =>
+		{
+			if(wrapped)
+				wrapFactor = t;
+			else
+				wrapFactor = 1 -t;
+
+		}));
+
+		isWrapping = false;
+	}
 
 
 }
