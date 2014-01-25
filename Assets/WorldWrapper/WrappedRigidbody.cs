@@ -10,7 +10,7 @@ public class WrappedRigidbody : MonoBehaviour
 	public bool wrapped = false;
 
 	public bool alignWithGravity = true;
-	public float onWrapOffset = 1f;
+	public float onWrapOffset = 0f;
 
 	void Reset()
 	{
@@ -32,7 +32,6 @@ public class WrappedRigidbody : MonoBehaviour
 			direction = -transform.position.normalized;
 
 			rigidbody.AddForce(direction * gravity, forcemode);
-
 		}
 		else
 		{
@@ -42,18 +41,21 @@ public class WrappedRigidbody : MonoBehaviour
 		}
 
 		if(alignWithGravity)
-			transform.up = direction;
+			transform.up = -direction;
 	}
 
 	public void Wrap()
 	{
 		transform.position = WorldWrapper.WrapPoint(transform.position);
+		transform.Translate(transform.position.normalized * onWrapOffset);
 		wrapped = true;
 	}
 
 	public void Unwrap()
 	{
 		transform.position = WorldWrapper.UnwrapPoint(transform.position);
+		transform.Translate(Vector3.up * onWrapOffset);
+		
 		wrapped = false;
 	}
 }

@@ -6,6 +6,7 @@ using System.Linq;
 public class WrapController : MonoBehaviour 
 {
 	public World world;
+	public float wrapTime = 1f;
 
 	public static WrapController instance
 	{
@@ -30,12 +31,22 @@ public class WrapController : MonoBehaviour
 		instance = this;
 	}
 
-	bool wrap = true;
+	public bool wrapped
+	{
+		get;
+		private set;
+	}
+
+	void Start()
+	{
+		wrapped = false;
+	}
+
 	void Update()
 	{
 		if(Input.GetKeyDown(KeyCode.Space))
 		{
-			if(wrap)
+			if(wrapped)
 			{
 				world.Wrap();
 				bodies.ForEach(body => body.Wrap());
@@ -45,9 +56,11 @@ public class WrapController : MonoBehaviour
 				world.Unwrap();
 				bodies.ForEach(body => body.Unwrap());
 			}
-			wrap = !wrap;
+			wrapped = !wrapped;
 		}
 	}
+
+
 
 
 }

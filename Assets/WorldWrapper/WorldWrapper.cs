@@ -14,7 +14,7 @@ public static class WorldWrapper
 		float x = Mathf.Cos(radians) * height;
 		float y = Mathf.Sin(radians) * height;
 
-		return new Vector3(x,y,0);
+		return new Vector3(x,y,point.z);
 	}
 
 	public static Vector3 UnwrapPoint(Vector3 point)
@@ -27,6 +27,6 @@ public static class WorldWrapper
 		float x = radians * Mathf.Rad2Deg; 
 		float y = point.magnitude;
 
-		return new Vector3(x,y,0);
+		return new Vector3(x,y,point.z);
 	}
 }
