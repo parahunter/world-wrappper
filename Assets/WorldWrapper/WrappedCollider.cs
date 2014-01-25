@@ -5,8 +5,13 @@ using System.Collections.Generic;
 public class WrappedCollider : WrappedEntity 
 {
 
+	Vector3 originalPos;
+	Quaternion originalRotation;
+
 	void Start()
 	{
+		originalPos = transform.position;
+		originalRotation = transform.rotation;
 		WrapController.instance.AddBody(this);
 	}
 
@@ -21,13 +26,16 @@ public class WrappedCollider : WrappedEntity
 		collider.enabled = false;
 		Vector3 unwrappedPoint = transform.position;
 		Vector3 wrappedPoint = WorldWrapper.WrapPoint(transform.position);
-		Vector3 unwrappedDirection = transform.up;
-		Vector3 wrappedDirection = WorldWrapper.WrapPoint(transform.up);
+
+		Quaternion unwrappedRotation = transform.rotation;
+		Vector3 newDirection = wrappedPoint.normalized;
+		newDirection.z = 0;
+		Quaternion wrappedRotation = Quaternion.FromToRotation(Vector3.up, newDirection.normalized);
 
 		yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
 		{
 			transform.position = Vector3.Slerp(unwrappedPoint, wrappedPoint, t);
-			transform.up = Vector3.Slerp(unwrappedDirection, wrappedDirection, t);
+			transform.rotation = Quaternion.Slerp(unwrappedRotation, wrappedRotation,t);
 		}));
 		
 		collider.enabled = true;
@@ -41,17 +49,21 @@ public class WrappedCollider : WrappedEntity
 	
 	IEnumerator UnwrapAnimate()
 	{
-		wrapped = false;
-		collider.enabled = false;
-
-		Vector3 wrappedPoint = transform.position;
-		Vector3 unwrappedPoint = WorldWrapper.UnwrapPoint(transform.position);
-		
-		yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
-		{
+			wrapped = false;
+			collider.enabled = false;
+			Vector3 unwrappedPoint = originalPos;
+			Vector3 wrappedPoint = transform.position;
+			
+			Quaternion wrappedRotation = transform.rotation;
+			Quaternion unwrappedRotation = originalRotation;
+			
+			yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
+			{
 			transform.position = Vector3.Slerp(wrappedPoint, unwrappedPoint, t);
-		}));
-		
-		collider.enabled = true;
-	}
+				transform.rotation = Quaternion.Slerp(wrappedRotation, unwrappedRotation,t);
+			}));
+			
+			collider.enabled = true;
+			
+		}
 }

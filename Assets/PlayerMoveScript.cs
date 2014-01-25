@@ -10,7 +10,14 @@ struct KeyState
 }
 
 public class PlayerMoveScript : MonoBehaviour {
-	
+	bool grounded = false;
+
+	public float baseGrip;
+	public float fullGrip;
+	public float circleRadius;
+	public float jumpPower;
+	public ForceMode forcemode;
+
 	KeyState mOldKeyState, mKeyState;
 
 	private void CaptureKeyState()
@@ -21,25 +28,25 @@ public class PlayerMoveScript : MonoBehaviour {
 		mKeyState.space = Input.GetKeyDown (KeyCode.Space);
 	}
 
-
 	private void MoveControl()
 	{ 
 		float xMovement = Input.GetAxis ("Horizontal");
 
-		if (WrapController.instance.wrapped)
-				xMovement = -xMovement;
+		float grip = baseGrip;
+
+		if (grounded)
+			fullGrip = 100.0f;
 
 		if (xMovement != 0.0f) {
-				gameObject.rigidbody.AddForce (gameObject.transform.right * xMovement * 20.0f);
-				Debug.Log (gameObject.rigidbody.velocity);
+			rigidbody.AddForce (transform.right * xMovement * grip, forcemode);
 		}
 	}
 
 	private bool Grounded()
 	{
-		Vector3 footPoint = gameObject.transform.position - (14.0f * gameObject.transform.up);
+		Vector3 footPoint = transform.position - (circleRadius * transform.up);
 
-		Ray jumpRay = new Ray (footPoint, Vector3.back);
+		Ray jumpRay = new Ray (footPoint, Vector3.forward);
 
 		if (Physics.Raycast (jumpRay)) {
 			return true;
@@ -59,15 +66,17 @@ public class PlayerMoveScript : MonoBehaviour {
 	// Update is called once per frame
 	void FixedUpdate () 
 	{
+		grounded = Grounded(); 
+
 		CaptureKeyState();
 
 		MoveControl();
 
-		if(Grounded())
+		if(grounded)
 		{
 			if(mKeyState.up && !mOldKeyState.up)
 			{
-				gameObject.rigidbody.AddForce(50.0f * transform.up);
+				rigidbody.AddForce(jumpPower * transform.up, forcemode);
 			}
 		}
 

@@ -21,7 +21,7 @@ public class CameraFollow : MonoBehaviour
 		pos.z = transform.position.z;
 
 		transform.position = pos;
-
+		
 		float currentAngle = transform.rotation.eulerAngles.z;
 		float angle = Mathf.SmoothDampAngle(currentAngle, target.rotation.eulerAngles.z, ref rotateVelocity, rotateFollowTime);
 
