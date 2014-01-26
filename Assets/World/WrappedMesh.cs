@@ -41,7 +41,7 @@ public class WrappedMesh : WrappedEntity
 		for(int i = 0 ; i < verts.Length ; i++)
 		{
 			Vector3 scaledVert = vertices[i];
-
+	
 			Vector3 worldSpaceVert = transform.position + originalRotation * scaledVert;
 			verts[i] = WorldWrapper.WrapPoint( worldSpaceVert ) + offset;
 			//verts[i] *= -1;

@@ -20,6 +20,16 @@ public class PlayerMoveScript : MonoBehaviour {
 
 	KeyState mOldKeyState, mKeyState;
 
+	bool shouldJump = false;
+
+	void Update()
+	{
+		if(Input.GetButtonDown("Vertical"))
+			shouldJump = true;
+		else if(Input.GetButtonUp("Vertical"))
+			shouldJump = false;
+	}
+
 	private void CaptureKeyState()
 	{
 		mKeyState.left = Input.GetKeyDown (KeyCode.LeftArrow);
@@ -75,8 +85,9 @@ public class PlayerMoveScript : MonoBehaviour {
 
 		if(grounded)
 		{
-			if(Input.GetButtonDown("Vertical"))
+			if(shouldJump)
 			{
+				shouldJump = false;
 				rigidbody.AddForce(jumpPower * transform.up, forcemode);
 			}
 		}	

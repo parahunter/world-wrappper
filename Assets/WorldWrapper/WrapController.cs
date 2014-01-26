@@ -59,6 +59,12 @@ public class WrapController : MonoBehaviour
 			StartCoroutine(WrapCoroutine());
 	}
 
+	public void DoWrap()
+	{
+		if(!isWrapping)
+			StartCoroutine(WrapCoroutine());
+	}
+
 	void Update()
 	{
 		if(Input.GetKeyDown(KeyCode.Q) && !isWrapping)
@@ -69,8 +75,9 @@ public class WrapController : MonoBehaviour
 
 	IEnumerator WrapCoroutine()
 	{
+		wrapped = !wrapped;
 		isWrapping = true;
-		if(!wrapped)
+		if(wrapped)
 		{
 			followScript.Wrap();
 			entities.ForEach(body => body.Wrap());
@@ -80,7 +87,7 @@ public class WrapController : MonoBehaviour
 			followScript.Unwrap();
 			entities.ForEach(body => body.Unwrap());
 		}
-		wrapped = !wrapped;
+
 
 		yield return StartCoroutine(pTween.To(wrapTime, t =>
 		{
