@@ -5,24 +5,24 @@ using System.Collections.Generic;
 public class LazorUse : MonoBehaviour 
 {
 	bool lightActive = false;
+	GameObject firePoint;
+	GameObject light;
 
 	// Use this for initialization
 	void Start () 
 	{
-	
+		light = gameObject.transform.parent.FindChild ("Light").gameObject;
 	}
 	
 	// Update is called once per frame
 	void Update () 
 	{
-	
 	}
 
 	void OnTriggerEnter()
 	{
 		if (!lightActive)
 		{
-			GameObject light = gameObject.transform.parent.FindChild ("Light").gameObject;
 			light.SetActive (true);
 			lightActive = true;
 		}
@@ -32,7 +32,6 @@ public class LazorUse : MonoBehaviour
 	{
 		if (lightActive)
 		{
-			GameObject light = gameObject.transform.parent.FindChild ("Light").gameObject;
 			light.SetActive (false);
 			lightActive = false;
 		}
