@@ -17,7 +17,7 @@ public class GroundLayersFilter : MonoBehaviour
 	public Layer[] layers;
 
 	public float noiseStep = 0.01f;
-	public float stableNoiseRation = 0.3f;
+	public float stableNoiseRatio = 0.3f;
 
 	private Color[] pix; 
 	
@@ -48,7 +48,7 @@ public class GroundLayersFilter : MonoBehaviour
 			for(int x = 0; x < texture.width; ++x)
 			{
 				float rand = Random.value * layers[layerIndex].noise;
-				if (Mathf.Abs(rand - yOffset) > stableNoiseRation * layers[layerIndex].noise)
+				if (Mathf.Abs(rand - yOffset) > stableNoiseRatio * layers[layerIndex].noise)
 				{
 					yOffset += Mathf.Sign(rand - yOffset) * noiseStep;
 				}
