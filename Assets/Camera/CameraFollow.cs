@@ -13,6 +13,7 @@ public class CameraFollow : MonoBehaviour
 	private float rotateVelocity;
 	public float heightOffsetUnwrapped = 5;
 	public float heightOffsetWrapped = 5;
+	public AudioSource flipSound;
 
 	void Start()
 	{
@@ -47,6 +48,9 @@ public class CameraFollow : MonoBehaviour
 
 	public void Wrap()
 	{
+		flipSound.Play();
+		flipSound.pitch = -flipSound.pitch;
+		flipSound.time = flipSound.clip.length;
 		StartCoroutine(WrapAnimate());
 	}
 	
@@ -63,6 +67,9 @@ public class CameraFollow : MonoBehaviour
 	
 	public void Unwrap()
 	{
+		flipSound.Play();
+		flipSound.pitch = -flipSound.pitch;
+		flipSound.time = 0;
 		StartCoroutine(UnwrapAnimate());
 	}
 	

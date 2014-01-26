@@ -7,10 +7,15 @@ public class Portal : MonoBehaviour
 	public Transform door;
 	public float doorCloseTime = 0.5f;
 	public float ballScaleTime = 1f;
+
+	public AudioSource winSound;
+	public AudioSource exitSound;
+	bool triggered = false;
 	void OnTriggerEnter(Collider other)
 	{
-		if(other.tag == "Player")
+		if(other.tag == "Player" && !triggered)
 		{
+			triggered = true;
 			StartCoroutine(Transition(other.gameObject));
 		}
 	}
@@ -21,6 +26,8 @@ public class Portal : MonoBehaviour
 
 		Vector3 doorClosedScale = door.localScale;
 		Vector3 doorOpenScale = doorClosedScale;
+
+		winSound.Play();
 		doorOpenScale.x = 0;
 		yield return StartCoroutine(pTween.To (doorCloseTime, t =>
 		                                       {
@@ -32,7 +39,7 @@ public class Portal : MonoBehaviour
 		Vector3 startScale = playerTransform.localScale;
 
 		Vector3 playerStartPos = playerTransform.position;
-
+		exitSound.Play();
 		yield return StartCoroutine(pTween.To (ballScaleTime, t =>
 			                                       {
 			playerTransform.position = Vector3.Lerp(playerStartPos, transform.position, t);

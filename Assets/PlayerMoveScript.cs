@@ -22,6 +22,8 @@ public class PlayerMoveScript : MonoBehaviour {
 
 	bool shouldJump = false;
 
+	public AudioSource jumpSound;
+
 	void Update()
 	{
 		if(Input.GetButtonDown("Vertical"))
@@ -87,6 +89,7 @@ public class PlayerMoveScript : MonoBehaviour {
 		{
 			if(shouldJump)
 			{
+				jumpSound.Play();
 				shouldJump = false;
 				rigidbody.AddForce(jumpPower * transform.up, forcemode);
 			}

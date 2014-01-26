@@ -98,6 +98,8 @@ public class WrapController : MonoBehaviour
 
 		}));
 
+		yield return new WaitForSeconds(0.1f);
+
 		isWrapping = false;
 	}
 
