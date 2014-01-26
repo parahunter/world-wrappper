@@ -12,9 +12,14 @@ public class WrappedMesh : WrappedEntity
 	Vector3[] wrappedVertices;
 
 	Vector3 startScale;
+	Vector3 originalPos;
+	Quaternion originalRotation;
 	void Start () 
 	{
 		startScale = transform.localScale;
+		originalPos = transform.position;
+		originalRotation = transform.rotation;
+
 		WrapController.instance.AddBody(this);
 
 		meshCollider = GetComponent<MeshCollider>();
@@ -29,10 +34,17 @@ public class WrappedMesh : WrappedEntity
 	{
 		Vector3[] verts = new Vector3[vertices.Length];
 
+		Vector3 offset = transform.position;
+		offset.y = -transform.position.y;
+		offset.x = -transform.position.x;
+
 		for(int i = 0 ; i < verts.Length ; i++)
 		{
-			verts[i] = WorldWrapper.WrapPoint( vertices[i] + transform.position) + transform.position;
-			verts[i] *= -1;
+			Vector3 scaledVert = vertices[i];
+
+			Vector3 worldSpaceVert = transform.position + originalRotation * scaledVert;
+			verts[i] = WorldWrapper.WrapPoint( worldSpaceVert ) + offset;
+			//verts[i] *= -1;
 		}
 
 		return verts;
@@ -57,6 +69,7 @@ public class WrappedMesh : WrappedEntity
 			for(int i = 0 ; i < verts.Length ; i++)
 			{
 				verts[i] = Vector3.Slerp(originalVertices[i], wrappedVertices[i], t);
+
 			}
 				
 			mesh.vertices = verts;
@@ -84,7 +97,7 @@ public class WrappedMesh : WrappedEntity
 
 			if(meshCollider != null)
 				meshCollider.sharedMesh = mesh;
-			
+
 			transform.localScale = startScale;
 		}));
 	}

@@ -58,7 +58,7 @@ public class WrappedCollider : WrappedEntity
 			
 			yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
 			{
-			transform.position = Vector3.Slerp(wrappedPoint, unwrappedPoint, t);
+				transform.position = Vector3.Slerp(wrappedPoint, unwrappedPoint, t);
 				transform.rotation = Quaternion.Slerp(wrappedRotation, unwrappedRotation,t);
 			}));
 			
