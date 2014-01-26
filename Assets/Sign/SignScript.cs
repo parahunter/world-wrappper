@@ -10,10 +10,10 @@ public class SignScript : MonoBehaviour {
 
 	private float bubbleTexWidth = 0.0f;
 	private float bubbleTexHeight = 0.0f;
-	private bool guiDraw = false;
+	protected bool guiDraw = false;
 
 	// Use this for initialization
-	void Start () {
+	public virtual void Start () {
 		bubbleTexHeight = Screen.height * bubbleHeightRatio;
 		bubbleTexWidth = bubbleTexHeight * bubbleAspect;
 	}
@@ -35,13 +35,19 @@ public class SignScript : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerEnter()
+	void OnTriggerEnter(Collider other)
 	{
-		guiDraw = true;
+		if (other.gameObject.tag == "Player")
+		{
+			guiDraw = true;
+		}
 	}
 
-	void OnTriggerExit()
+	void OnTriggerExit(Collider other)
 	{
-		guiDraw = false;
+		if (other.gameObject.tag == "Player")
+		{
+			guiDraw = false;
+		}
 	}
 }

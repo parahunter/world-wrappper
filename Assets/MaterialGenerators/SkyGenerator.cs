@@ -68,7 +68,6 @@ public class SkyGenerator : MonoBehaviour {
 		}
 		else
 		{
-			//roundColor = Color.Lerp(roundColor1, roundColor2, gradient);
 			roundColor = roundGradient.Evaluate(gradient);
 		}
 	}
@@ -114,8 +113,6 @@ public class SkyGenerator : MonoBehaviour {
 
 	void CalcLerpTexture()
 	{
-		Color roundColor = new Color ();
-		
 		// For each pixel in the texture...
 		for (int y = 0; y < flatTex.height; y++)
 		{

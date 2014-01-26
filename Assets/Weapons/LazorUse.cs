@@ -2,38 +2,26 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class LazorUse : MonoBehaviour 
+public class LazorUse : SignScript 
 {
 	bool lightActive = false;
 	GameObject firePoint;
-	GameObject light;
+	GameObject lightObject;
 
 	// Use this for initialization
-	void Start () 
+	public override void Start () 
 	{
-		light = gameObject.transform.parent.FindChild ("Light").gameObject;
+		base.Start ();
+		lightObject = gameObject.transform.parent.FindChild ("Light").gameObject;
 	}
 	
 	// Update is called once per frame
-	void Update () 
+	void FixedUpdate () 
 	{
-	}
-
-	void OnTriggerEnter(Collider other)
-	{
-		if (other.gameObject.tag == "Player" && !lightActive)
+		if (guiDraw && Input.GetKeyDown (KeyCode.E))
 		{
-			light.SetActive (true);
-			lightActive = true;
-		}
-	}
-
-	void OnTriggerExit(Collider other)
-	{
-		if (other.gameObject.tag == "Player" && lightActive)
-		{
-			light.SetActive (false);
-			lightActive = false;
+			lightActive = !lightActive;
+			lightObject.SetActive (lightActive);
 		}
 	}
 }
