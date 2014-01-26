@@ -5,7 +5,7 @@ public class LevelUVMapper : MonoBehaviour {
 
 	public Material material;
 	public Mesh mesh;
-	bool refreshOnWrap = false;
+	public bool refreshOnWrap = true;
 
 	// Use this for initialization
 	void Start () {

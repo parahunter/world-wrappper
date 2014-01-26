@@ -103,7 +103,7 @@ public class PerlinKamoGenerator : MonoBehaviour
 			{
 				// Get a sample from the corresponding position in the noise plane
 				// and create a greyscale pixel from it.
-				float xCoord = layer.xOff + (float)x / noiseTex.width * layer.scale;
+				float xCoord = layer.xOff + Mathf.Abs((float)x / (noiseTex.width / 2) - 1.0f) * layer.scale;
 				float yCoord = layer.yOff + (float)y / noiseTex.height * layer.scale;
 				float sample = Mathf.PerlinNoise(xCoord, yCoord);
 
