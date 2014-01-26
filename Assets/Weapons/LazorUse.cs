@@ -19,18 +19,18 @@ public class LazorUse : MonoBehaviour
 	{
 	}
 
-	void OnTriggerEnter()
+	void OnTriggerEnter(Collider other)
 	{
-		if (!lightActive)
+		if (other.gameObject.tag == "Player" && !lightActive)
 		{
 			light.SetActive (true);
 			lightActive = true;
 		}
 	}
 
-	void OnTriggerExit()
+	void OnTriggerExit(Collider other)
 	{
-		if (lightActive)
+		if (other.gameObject.tag == "Player" && lightActive)
 		{
 			light.SetActive (false);
 			lightActive = false;
