@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class WrapWorldOn : MonoBehaviour 
+public class Lazor : MonoBehaviour 
 {
 
 	// Use this for initialization

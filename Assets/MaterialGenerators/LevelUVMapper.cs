@@ -5,6 +5,7 @@ public class LevelUVMapper : MonoBehaviour {
 
 	public Material material;
 	public Mesh mesh;
+	public bool refreshOnWrap = true;
 
 	// Use this for initialization
 	void Start () {
@@ -13,7 +14,7 @@ public class LevelUVMapper : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (WrapController.instance.wrapFactor >= 0.0f && WrapController.instance.wrapFactor < 1.0f)
+		if (refreshOnWrap && WrapController.instance.wrapFactor >= 0.0f && WrapController.instance.wrapFactor < 1.0f)
 			UpdateUVs ();
 	}
 
