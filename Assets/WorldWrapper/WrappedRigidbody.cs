@@ -40,7 +40,11 @@ public class WrappedRigidbody : WrappedEntity
 		}
 
 		if(alignWithGravity)
-			transform.up = -direction;
+		{
+			Vector3 fromCenter = -direction;// transform.position.normalized;
+			float radians = Mathf.Atan2(fromCenter.y, fromCenter.x);
+			transform.rotation = Quaternion.Euler(0, 0, Mathf.Rad2Deg * radians - 90f);
+		}
 	}
 
 	public override void Wrap()
