@@ -29,7 +29,7 @@ public class WrappedCollider : WrappedEntity
 		Quaternion unwrappedRotation = transform.rotation;
 		Vector3 newDirection = wrappedPoint.normalized;
 		newDirection.z = 0;
-		Quaternion wrappedRotation = Quaternion.FromToRotation(Vector3.up, newDirection.normalized);
+		Quaternion wrappedRotation = transform.rotation * Quaternion.FromToRotation(Vector3.up, newDirection.normalized);
 
 		yield return StartCoroutine( pTween.To(WrapController.instance.wrapTime, t =>
 		{

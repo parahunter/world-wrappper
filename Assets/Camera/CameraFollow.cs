@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class CameraFollow : MonoBehaviour 
 {
-	public Transform target;
+	Transform target;
 
 	public float followTime = 1f;
 	public float rotateFollowTime = 1f;
@@ -13,7 +13,17 @@ public class CameraFollow : MonoBehaviour
 	private float rotateVelocity;
 	public float heightOffsetUnwrapped = 5;
 	public float heightOffsetWrapped = 5;
-	
+
+	void Start()
+	{
+		target = GameObject.FindGameObjectWithTag("Player").transform;
+		Vector3 pos = GameObject.FindGameObjectWithTag("Portal").transform.position;
+
+		pos.z = transform.position.z;
+
+		transform.position = pos;
+	}
+
 	// Update is called once per frame
 	void Update () 
 	{

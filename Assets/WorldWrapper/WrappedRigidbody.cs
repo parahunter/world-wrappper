@@ -52,7 +52,10 @@ public class WrappedRigidbody : WrappedEntity
 	{
 		wrapped = true;
 		rigidbody.isKinematic = true;
-		collider.enabled = false;
+
+		if(collider != null)
+			collider.enabled = false;
+	
 		Vector3 unwrappedPoint = transform.position;
 		Vector3 wrappedPoint = WorldWrapper.WrapPoint(transform.position);
 
@@ -62,7 +65,9 @@ public class WrappedRigidbody : WrappedEntity
 		}));
 
 		rigidbody.isKinematic = false;
-		collider.enabled = true;
+
+		if(collider != null)
+			collider.enabled = true;
 
 	}
 
@@ -75,7 +80,10 @@ public class WrappedRigidbody : WrappedEntity
 	{
 		wrapped = false;
 		rigidbody.isKinematic = true;
-		collider.enabled = false;
+
+		if(collider != null)
+			collider.enabled = false;
+
 		Vector3 wrappedPoint = transform.position;
 		Vector3 unwrappedPoint = WorldWrapper.UnwrapPoint(transform.position);
 		
@@ -85,7 +93,9 @@ public class WrappedRigidbody : WrappedEntity
 		}));
 		
 		rigidbody.isKinematic = false;
-		collider.enabled = true;
+
+		if(collider != null)
+			collider.enabled = true;
 		
 	}
 
